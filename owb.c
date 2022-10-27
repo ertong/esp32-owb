@@ -225,6 +225,9 @@ static owb_status _search(const OneWireBus * bus, OneWireBus_SearchState * state
         }
         while (rom_byte_number < 8);  // loop until through all ROM bytes 0-7
 
+        // state->rom_code.bytes
+        // ESP_LOG_BUFFER_HEX("owb-found-rom", state->rom_code.bytes, 8);
+
         // if the search was successful then
         if (!((id_bit_number < 65) || (crc8 != 0)))
         {

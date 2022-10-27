@@ -68,15 +68,15 @@ sample code bearing this copyright.
 // bus reset: duration of low phase [us]
 #define OW_DURATION_RESET 480
 // overall slot duration
-#define OW_DURATION_SLOT 75
+#define OW_DURATION_SLOT (60+15+15+15) // 60us + some more for spacing - can be usefull for capacitive lines
 // write 1 slot and read slot durations [us]
-#define OW_DURATION_1_LOW    2
+#define OW_DURATION_1_LOW    15 //15 us or less
 #define OW_DURATION_1_HIGH (OW_DURATION_SLOT - OW_DURATION_1_LOW)
 // write 0 slot durations [us]
 #define OW_DURATION_0_LOW   65
 #define OW_DURATION_0_HIGH (OW_DURATION_SLOT - OW_DURATION_0_LOW)
 // sample time for read slot
-#define OW_DURATION_SAMPLE  (15-2)
+#define OW_DURATION_SAMPLE  ((OW_DURATION_1_LOW+28)/2)  // why 28?
 // RX idle threshold
 // needs to be larger than any duration occurring during write slots
 #define OW_DURATION_RX_IDLE (OW_DURATION_SLOT + 2)
@@ -136,8 +136,10 @@ static owb_status _reset(const OneWireBus * bus, bool * is_present)
 
                 for (int i = 0; i < (rx_size / sizeof(rmt_item32_t)); i++)
                 {
-                    ESP_LOGI(TAG, "i: %d, level0: %d, duration %d", i, rx_items[i].level0, rx_items[i].duration0);
-                    ESP_LOGI(TAG, "i: %d, level1: %d, duration %d", i, rx_items[i].level1, rx_items[i].duration1);
+                    ESP_LOGI(TAG, "reset i: %d, level0: %d, duration %d, level1: %d, duration %d", i, 
+                        rx_items[i].level0, rx_items[i].duration0, 
+                        rx_items[i].level1, rx_items[i].duration1
+                    );
                 }
 #endif
 
@@ -286,10 +288,12 @@ static owb_status _read_bits(const OneWireBus * bus, uint8_t *in, int number_of_
         if (rx_items)
         {
 #ifdef OW_DEBUG
-            for (int i = 0; i < rx_size / 4; i++)
-            {
-                ESP_LOGI(TAG, "level: %d, duration %d", rx_items[i].level0, rx_items[i].duration0);
-                ESP_LOGI(TAG, "level: %d, duration %d", rx_items[i].level1, rx_items[i].duration1);
+            for (int i = 0; i < rx_size / sizeof(rmt_item32_t); i++)
+            { 
+                ESP_LOGI(TAG, "level: %d, duration %d level: %d, duration %d", 
+                    rx_items[i].level0, rx_items[i].duration0,
+                    rx_items[i].level1, rx_items[i].duration1
+                );
             }
 #endif
 
