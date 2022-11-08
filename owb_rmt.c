@@ -455,7 +455,7 @@ static owb_status _init(owb_rmt_driver_info *info, gpio_num_t gpio_num,
     return status;
 }
 
-OneWireBus * owb_rmt_initialize(owb_rmt_driver_info * info, gpio_num_t gpio_num,
+owb_status owb_rmt_initialize(owb_rmt_driver_info * info, gpio_num_t gpio_num,
                                 rmt_channel_t tx_channel, rmt_channel_t rx_channel)
 {
     ESP_LOGD(TAG, "%s: gpio_num: %d, tx_channel: %d, rx_channel: %d",
@@ -465,9 +465,10 @@ OneWireBus * owb_rmt_initialize(owb_rmt_driver_info * info, gpio_num_t gpio_num,
     if (status != OWB_STATUS_OK)
     {
         ESP_LOGE(TAG, "_init() failed with status %d", status);
+        _uninitialize(&info->bus);
     }
 
     info->bus.strong_pullup_gpio = GPIO_NUM_NC;
 
-    return &(info->bus);
+    return status;
 }

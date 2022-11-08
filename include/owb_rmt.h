@@ -65,7 +65,7 @@ typedef struct
  * @param[in] rx_channel the RMT channel to use for receiving data from bus devices.
  * @return OneWireBus *, pass this into the other OneWireBus public API functions
  */
-OneWireBus* owb_rmt_initialize(owb_rmt_driver_info * info, gpio_num_t gpio_num,
+owb_status owb_rmt_initialize(owb_rmt_driver_info * info, gpio_num_t gpio_num,
                                rmt_channel_t tx_channel, rmt_channel_t rx_channel);
 
 #ifdef __cplusplus
