@@ -141,7 +141,7 @@ static owb_status _search(const OneWireBus * bus, OneWireBus_SearchState * state
             state->last_device_flag = false;
             state->last_family_discrepancy = 0;
             *is_found = false;
-            return OWB_STATUS_OK;
+            return OWB_STATUS_NOT_PRESENT;
         }
 
         // issue the search command
@@ -677,8 +677,7 @@ owb_status owb_search_first(const OneWireBus * bus, OneWireBus_SearchState * sta
         state->last_discrepancy = 0;
         state->last_family_discrepancy = 0;
         state->last_device_flag = false;
-        _search(bus, state, &result);
-        status = OWB_STATUS_OK;
+        status = _search(bus, state, &result);
 
         *found_device = result;
     }

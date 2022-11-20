@@ -119,7 +119,8 @@ typedef enum
     OWB_STATUS_DEVICE_NOT_RESPONDING,  ///< No response received from the addressed device or devices
     OWB_STATUS_CRC_FAILED,             ///< CRC failed on data received from a device or devices
     OWB_STATUS_TOO_MANY_BITS,          ///< Attempt to write an incorrect number of bits to the One Wire Bus
-    OWB_STATUS_HW_ERROR                ///< A hardware error occurred
+    OWB_STATUS_HW_ERROR,                ///< A hardware error occurred
+    OWB_STATUS_NOT_PRESENT              ///Reset did not detect any devices
 } owb_status;
 
 /** NOTE: Driver assumes that (*init) was called prior to any other methods */
