@@ -38,8 +38,8 @@
 #include "esp_log.h"
 #include "sdkconfig.h"
 #include "driver/gpio.h"
-#include "rom/ets_sys.h"    // for ets_delay_us()
-#include "rom/gpio.h"       // for gpio_pad_select_gpio()
+#include "rom/ets_sys.h"    // for esp_rom_delay_us()
+#include "rom/gpio.h"       // for esp_rom_gpio_pad_select_gpio()
 
 #include "owb.h"
 #include "owb_gpio.h"
@@ -84,7 +84,7 @@ static const struct _OneWireBus_Timing _StandardTiming = {
 
 static void _us_delay(uint32_t time_us)
 {
-    ets_delay_us(time_us);
+    esp_rom_delay_us(time_us);
 }
 
 /// @cond ignore
@@ -273,7 +273,7 @@ OneWireBus* owb_gpio_initialize(owb_gpio_driver_info * driver_info, int gpio)
     driver_info->bus.strong_pullup_gpio = GPIO_NUM_NC;
 
     // platform specific:
-    gpio_pad_select_gpio(driver_info->gpio);
+    esp_rom_gpio_pad_select_gpio(driver_info->gpio);
 
 #ifdef PHY_DEBUG
     gpio_config_t io_conf;
